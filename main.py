@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from config.database import engine, Base
+from flask_cors import CORS
 
 from app.models.usuario import Usuario
 from app.models.favorito import Favorito 
@@ -11,6 +12,7 @@ from app.services.recomendador_service import recomendar_titulo
 from app.services.omdb_service import buscar_pelicula
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def home():
@@ -109,22 +111,90 @@ def eliminar_fav(id):
 def recomendar():
     estado = request.args.get("estado")
 
-    titulo = recomendar_titulo(estado)
+    titulos = recomendar_titulo(estado)
 
-    if not titulo:
+    if not titulos:
         return jsonify({
             "error": "Estado de animo no valido"
         }), 400
     
-    pelicula = buscar_pelicula(titulo)
+    peliculas = []
+    
+    for titulo in titulos:
+        pelicula = buscar_pelicula(titulo)
+
+        peliculas.append({
+            "titulo": pelicula["Title"],
+            "año": pelicula["Year"],
+            "genero": pelicula["Genre"],
+            "sinopsis": pelicula["Plot"],
+            "calificacion": pelicula["imdbRating"],
+            "poster": pelicula["Poster"]  
+        })
+
+    return jsonify(peliculas)
+
+
+@app.route('/inicio', methods=['GET'])
+def inicio():
+    titulos = [
+        "Shrek",
+        "Toy Story",
+        "Titanic",
+        "Avatar",
+        "Interstellar",
+        "The Matrix",
+        "John Wick",
+        "Gladiator",
+        "The Dark Knight",
+        "Inception",
+        "Cars",
+        "Finding Nemo",
+        "Coco",
+        "Up",
+        "Frozen",
+        "Joker",
+        "Fight Club",
+        "The Godfather",
+        "Forrest Gump",
+        "Top Gun"
+    ]
+
+    peliculas = []
+
+    for titulo in titulos:
+        pelicula = buscar_pelicula(titulo)
+
+        peliculas.append({
+            "titulo": pelicula["Title"],
+            "año": pelicula["Year"],
+            "genero": pelicula["Genre"],
+            "sinopsis": pelicula["Plot"],
+            "calificacion": pelicula["imdbRating"],
+            "poster": pelicula["Poster"]
+        })
+    
+    return jsonify(peliculas)
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+
+    usuario = login_usuario(
+        data["email"],
+        data["password"]
+    )
+
+    if not usuario:
+
+        return jsonify({
+            "error": "Credenciales inválidas"
+        }), 401
 
     return jsonify({
-        "estado": estado,
-        "titulo": pelicula["Title"],
-        "año": pelicula["Year"],
-        "genero": pelicula["Genre"],
-        "sinopsis": pelicula["Plot"],
-        "calificacion": pelicula["imdbRating"]
+        "id": usuario.id,
+        "nombre": usuario.nombre,
+        "email": usuario.email
     })
 
 
