@@ -20,3 +20,17 @@ def obtener_favoritos(usuario_id):
     favoritos = db.query(Favorito).filter(Favorito.usuario_id == usuario_id).all()
     db.close()
     return favoritos
+
+def elminar_favorito(id):
+    db = SessionLocal()
+    favorito = db.query(Favorito).filter(
+        Favorito.id == id
+    ).first()
+
+    if not favorito:
+        return False
+    
+    db.delete(favorito)
+    db.commit()
+
+    return True
