@@ -9,7 +9,7 @@ def agregar_favorito(data):
         titulo=data["titulo"]
     )
 
-    db.add()
+    db.add(favorito)
     db.commit()
     db.close()
 

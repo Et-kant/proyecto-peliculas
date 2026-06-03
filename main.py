@@ -37,6 +37,37 @@ def listar():
     ])
 
 
+@app.route('/usuarios/<int:id>', methods=['GET'])
+def obtener_usuario(id):
+    usuario = obtener_usuario_id(id)
+
+    if not usuario:
+        return jsonify({
+            "error": "usuario no encontrado"
+        }), 404
+    
+    return jsonify({
+        "id": usuario.id,
+        "nombre": usuario.nombre,
+        "email": usuario.email
+    })
+
+@app.route('/usuarios/<int:id>', methods=['PUT'])
+def actualizar(id):
+    data = request.json
+
+    usuario = actualizar_usuario(id,data)
+
+    if not usuario:
+        return jsonify({
+            "error": "usuario no encontrado"
+        }), 404
+    
+    return jsonify({
+        "id": usuario.id,
+        "nombre": usuario.nombre,
+        "email": usuario.email
+    })
 
 
 @app.route('/favoritos', methods=['POST'])
