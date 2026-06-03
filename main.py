@@ -7,6 +7,9 @@ from app.models.favorito import Favorito
 from app.controllers.usuario_controller import *
 from app.controllers.favorito_controller import *
 
+from app.services.recomendador_service import recomendar_titulo
+from app.services.omdb_service import buscar_pelicula
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -88,6 +91,41 @@ def ver_favoritos(usuario_id):
             "titulo": f.titulo
         } for f in favoritos
     ])
+
+@app.route('/favoritos/<int:id>', methods=['DELETE'])
+def eliminar_fav(id):
+    eliminado = elminar_favorito(id)
+
+    if not eliminado:
+        return jsonify({
+            "error": "Favorito no encontrado"
+        }), 404
+    
+    return jsonify({
+        "mensaje": "Favorito eliminado"
+    })
+
+@app.route('/recomendar', methods=['GET'])
+def recomendar():
+    estado = request.args.get("estado")
+
+    titulo = recomendar_titulo(estado)
+
+    if not titulo:
+        return jsonify({
+            "error": "Estado de animo no valido"
+        }), 400
+    
+    pelicula = buscar_pelicula(titulo)
+
+    return jsonify({
+        "estado": estado,
+        "titulo": pelicula["Title"],
+        "año": pelicula["Year"],
+        "genero": pelicula["Genre"],
+        "sinopsis": pelicula["Plot"],
+        "calificacion": pelicula["imdbRating"]
+    })
 
 
 if __name__ == "__main__":
