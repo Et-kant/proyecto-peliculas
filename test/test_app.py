@@ -10,7 +10,7 @@ def client():
 def test_crear_usuario(client):
     response = client.post("/usuarios", json = {
         "nombre" : "test",
-        "email": "amen@gmail.com",
+        "email": "amen1@gmail.com",
         "password": "1234"
     })
 
@@ -28,3 +28,20 @@ def test_obtener_usuarios(client):
     data = response.get_json()
 
     assert isinstance(data, list)
+
+
+def test_agregar_favorito(client):
+    usuario = client.post("/usuarios", json={
+        "nombre": "test",
+        "email": "email1@test.com",
+        "password": "1234"
+    })
+
+    usuario_data = usuario.get_json()
+
+    response = client.post("/favoritos", json={
+        "usuario_id" : usuario_data["id"],
+        "titulo": "Batman"
+    })
+
+    assert response.status_code == 200

@@ -32,3 +32,29 @@ def eliminar_usuario(id):
         db.delete()
         db.commit()
         db.close()
+
+def obtener_usuario_id(id):
+    db =SessionLocal()
+
+    usuario = db.query(Usuario).filter(Usuario.id == id).first()
+
+    return usuario
+
+def actualizar_usuario(id, data):
+    db = SessionLocal()
+
+    usuario = db.query(Usuario).filter(
+        Usuario.id == id
+    ).first()
+
+    if not usuario:
+        return None
+    
+    usuario.nombre = data["nombre"]
+    usuario.email = data["email"]
+
+    db.commit()
+    db.refresh(usuario)
+
+    return usuario
+    
