@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>MoodMovies</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+     <section id="auth-section">
+        <div class="auth-container">
+            <h1>🎬 MoodMovies</h1>
+
+            <div id="login-form">
+                <h2>Iniciar Sesión</h2>
+                <input
+                    type="email"
+                    id="login-email"
+                    placeholder="Correo electrónico">
+
+                <input
+                    type="password"
+                    id="login-password"
+                    placeholder="Contraseña">
+
+                <button onclick="login()">
+                    Ingresar
+                </button>
+
+                <p>
+                    ¿No tienes cuenta?
+                </p>
+
+                <button onclick="mostrarRegistro()">
+                    Registrarse
+                </button>
+            </div>
+
+            <div
+                id="register-form"
+                style="display:none;">
+
+                <h2>Crear Cuenta</h2>
+
+                <input
+                    type="text"
+                    id="register-nombre"
+                    placeholder="Nombre">
+
+                <input
+                    type="email"
+                    id="register-email"
+                    placeholder="Correo electrónico">
+
+                <input
+                    type="password"
+                    id="register-password"
+                    placeholder="Contraseña">
+
+                <button onclick="registrar()">
+                    Crear Cuenta
+                </button>
+
+                <button onclick="mostrarLogin()">
+                    Volver
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="app-section" style="display: none;">
+    <nav>
+        <h2>🎬 MoodMovies</h2>
+        <div>
+            <button onclick="mostrarInicio()">
+                Inicio
+            </button>
+
+            <button onclick="mostrarFavoritos()">
+                Favoritos ❤️
+            </button>
+            <button onclick="logout()">
+                Cerrar Sesión
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section id="inicio">
+            <h1>
+                Encuentra una película según tu estado de ánimo
+            </h1>
+            <div class="moods">
+                <button onclick="seleccionarEstado('feliz','😊')">
+                    😊 Feliz
+                </button>
+                <button onclick="seleccionarEstado('triste','😢')">
+                    😢 Triste
+                </button>
+                <button onclick="seleccionarEstado('romantico','❤️')">
+                    ❤️ Romántico
+                </button>
+                <button onclick="seleccionarEstado('emocionado','⚡')">
+                    ⚡ Emocionado
+                </button>
+                <button onclick="seleccionarEstado('miedo','👻')">
+                    👻 Miedo
+                </button>
+            </div>
+
+            <button id="estado-btn">Selecciona un estado</button>
+
+            <button class="recommend-btn" onclick="recomendar()"> Recomendar </button>
+
+            <div id="peliculas"
+                 class="cards-container">
+            </div>
+        </section>
+
+        <section id="favoritos" style="display:none;">
+            <h1>
+                ❤️ Mis Favoritos
+            </h1>
+
+            <div id="lista-favoritos" class="cards-container"></div>
+        </section>
+    </main>
+    </section>
+    <script src="script.js"></script>
+</body>
+</html>

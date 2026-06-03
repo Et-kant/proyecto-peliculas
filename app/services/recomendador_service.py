@@ -41,4 +41,9 @@ def recomendar_titulo(estado):
     if not peliculas:
         return None
     
-    return random.choice(peliculas)
+    cantidad = min(4, len(peliculas))
+    
+    return random.sample(
+        peliculas,
+        cantidad
+    )
